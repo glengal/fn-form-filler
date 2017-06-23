@@ -45,11 +45,14 @@ const fillFieldsOfSameType = ({ elements, name }) => (
   })
 );
 
-const fillFields = () => (
-  getFields().forEach((field) => {
-    fillFieldsOfSameType(field);
-  })
-);
+const fillFields = () => {
+  console.log('filling');
+  return (
+    getFields().forEach((field) => {
+      fillFieldsOfSameType(field);
+    })
+  );
+};
 
 const data = {
   firstName: 'Roofus',

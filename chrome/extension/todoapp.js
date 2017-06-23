@@ -11,10 +11,14 @@ chrome.tabs.getSelected(null, (tab) => {
 });
 
 
-const doTheNeedfull = () => chrome.tabs.executeScript({
-  code: 'window.formFiller();',
-  allFrames: true,
-});
+const doTheNeedfull = () => {
+  console.log('doing smth...');
+  chrome.tabs.executeScript({
+    code: 'window.formFiller();',
+    allFrames: true,
+  });
+};
+
 
 chrome.extension.onRequest.addListener(
   (request, sender, sendResponse) => {
