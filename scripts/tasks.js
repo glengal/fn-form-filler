@@ -17,6 +17,7 @@ exports.copyAssets = (type) => {
   rm('-rf', type);
   mkdir(type);
   cp(`chrome/manifest.${env}.json`, `${type}/manifest.json`);
+  cp('chrome/extension/content-script.js', `${type}/content-script.js`);
   cp('-R', 'chrome/assets/*', type);
   exec(`pug -O "{ env: '${env}' }" -o ${type} chrome/views/`);
 };
