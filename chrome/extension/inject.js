@@ -2,6 +2,16 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import Dock from 'react-dock';
 
+let tabInfo;
+
+chrome.tabs.getSelected(null, (tab) => {
+  const tabId = tab.id;
+  const tabUrl = tab.url;
+  tabInfo = tab;
+  console.log(tab.url);
+});
+
+
 class InjectApp extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +26,7 @@ class InjectApp extends Component {
     return (
       <div>
         <button onClick={this.buttonOnClick}>
-          Open TodoApp
+          Open FN Filler
         </button>
         <Dock
           position="right"
@@ -24,6 +34,12 @@ class InjectApp extends Component {
           defaultSize={0.4}
           isVisible={this.state.isVisible}
         >
+          <div>
+            <div>
+              {tabInfo.url}
+              Test
+            </div>
+          </div>
           <iframe
             style={{
               width: '100%',

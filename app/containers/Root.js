@@ -9,10 +9,13 @@ export default class Root extends Component {
   };
 
   render() {
-    const { store } = this.props;
+    const { store, tab } = this.props;
+
+    console.log('root tab', tab);
+
     return (
-      <Provider store={store}>
-        <App />
+      <Provider store={store} tab={tab}>
+        <App tab={tab} />
       </Provider>
     );
   }

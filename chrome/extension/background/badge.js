@@ -1,5 +1,6 @@
 chrome.storage.local.get('todos', (obj) => {
   let todos = obj.todos;
+  console.log(obj);
   if (todos) {
     todos = JSON.parse(todos);
     const len = todos.filter(todo => !todo.marked).length;

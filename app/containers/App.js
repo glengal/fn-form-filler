@@ -22,11 +22,17 @@ export default class App extends Component {
   };
 
   render() {
-    const { todos, actions } = this.props;
+    const { todos, actions, tab } = this.props;
+
+
+    console.log('app tab', tab);
 
     return (
       <div className={style.normal}>
         <Header addTodo={actions.addTodo} />
+        <div>
+          {tab.url}
+        </div>
         <MainSection todos={todos} actions={actions} />
       </div>
     );
