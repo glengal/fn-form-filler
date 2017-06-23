@@ -20,6 +20,7 @@ chrome.extension.onRequest.addListener(
 chrome.tabs.getSelected(null, (tab) => {
   // Now inject a script onto the page
   chrome.tabs.executeScript(tab.id, {
+    file: './formFiller.js',
     code: "chrome.extension.sendRequest({content: document.body.innerHTML}, function(response) { console.log('success'); });"
   }, () => { console.log('done'); });
 });
@@ -29,12 +30,21 @@ chrome.storage.local.get('state', (obj) => {
   const { state } = obj;
   const actualState = JSON.parse(state || {});
 
+  const successfulBooking = {
+    fname: 'Roofus',
+    lname: 'Summers',
+  };
+
   const createStore = require('../../app/store/configureStore');
 
   console.log('tab HTML', tabHTML);
 
   ReactDOM.render(
-    <Root store={createStore(actualState)} tab={tabInfo} />,
+    <Root
+      store={createStore(actualState)}
+      tab={tabInfo}
+      successfulBooking={successfulBooking}
+    />,
     document.querySelector('#root')
   );
 });
