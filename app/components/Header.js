@@ -4,7 +4,7 @@ import TodoTextInput from './TodoTextInput';
 export default class Header extends Component {
 
   static propTypes = {
-    addTodo: PropTypes.func.isRequired
+    addTodo: PropTypes.func.isRequired,
   };
 
   handleSave = (text) => {
@@ -17,6 +17,7 @@ export default class Header extends Component {
     return (
       <header>
         <h1>FN Filler</h1>
+        <button onClick={this.props.fillAction}>Click Here</button>
       </header>
     );
   }
