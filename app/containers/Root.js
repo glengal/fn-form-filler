@@ -12,13 +12,17 @@ export default class Root extends Component {
     const {
       store,
       tab,
+      fillAction
     } = this.props;
 
     console.log('root tab', tab);
 
     return (
       <Provider store={store} tab={tab}>
-        <App tab={tab} />
+        <App
+          fillAction={fillAction}
+          tab={tab}
+        />
       </Provider>
     );
   }

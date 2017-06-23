@@ -10,6 +10,12 @@ chrome.tabs.getSelected(null, (tab) => {
   tabInfo = tab;
 });
 
+
+const doTheNeedfull = () => chrome.tabs.executeScript({
+  code: 'window.formFiller();',
+  allFrames: true,
+});
+
 chrome.extension.onRequest.addListener(
   (request, sender, sendResponse) => {
     // LOG THE CONTENTS HERE
@@ -34,6 +40,7 @@ chrome.storage.local.get('state', (obj) => {
       store={createStore(actualState)}
       tab={tabInfo}
       successfulBooking={successfulBooking}
+      fillAction={doTheNeedfull}
     />,
     document.querySelector('#root')
   );
