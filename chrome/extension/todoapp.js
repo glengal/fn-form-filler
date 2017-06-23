@@ -19,12 +19,12 @@ chrome.extension.onRequest.addListener(
 
 const makeItGreen = 'document.body.style.border = "5px solid green"';
 
-chrome.tabs.getSelected(null, (tab) => {
-  // Now inject a script onto the page
-  chrome.tabs.executeScript(tab.id, {
-    code: makeItGreen
-  }, () => { console.log('done'); });
-});
+// chrome.tabs.getSelected(null, (tab) => {
+//   // Now inject a script onto the page
+//   chrome.tabs.executeScript(tab.id, {
+//     code: makeItGreen
+//   }, () => { console.log('done'); });
+// });
 
 
 chrome.storage.local.get('state', (obj) => {

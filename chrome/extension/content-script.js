@@ -1,7 +1,9 @@
-import FormFiller form "./form-filler";
+const sillyBella = () => {
+  console.log("screw you Bella");
+};
 
 chrome.runtime.sendMessage('getOptions', (response) => {
   if (!window.formFiller) {
-    window.formFiller = new FormFiller(response.options, response.analyticsTrackingCode);
+    window.formFiller = sillyBella();
   }
 });
