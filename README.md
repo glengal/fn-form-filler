@@ -1,190 +1,113 @@
-# React Chrome Redux
-A set of utilities for building Redux applications in Google Chrome extensions. Although [React](https://facebook.github.io/react/) is mentioned in the package name, this package's only requirement is Redux. Feel free to use this with [AngularJS](https://angularjs.org/) and other libraries.
+# React Chrome Extension Boilerplate
 
-[![Build Status](https://travis-ci.org/tshaddix/react-chrome-redux.svg?branch=master)](https://travis-ci.org/tshaddix/react-chrome-redux)
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
+[![Build Status](https://travis-ci.org/jhen0409/react-chrome-extension-boilerplate.svg?branch=master)](https://travis-ci.org/jhen0409/react-chrome-extension-boilerplate)
+[![Build status: Windows](https://ci.appveyor.com/api/projects/status/b5xy6ev6oykth0d2/branch/master?svg=true)](https://ci.appveyor.com/project/jhen0409/react-chrome-extension-boilerplate/branch/master)
+[![NPM version](http://img.shields.io/npm/v/react-chrome-extension-boilerplate.svg?style=flat)](https://www.npmjs.com/package/react-chrome-extension-boilerplate)
+[![Dependency Status](https://david-dm.org/jhen0409/react-chrome-extension-boilerplate.svg)](https://david-dm.org/jhen0409/react-chrome-extension-boilerplate)
+[![devDependency Status](https://david-dm.org/jhen0409/react-chrome-extension-boilerplate/dev-status.svg)](https://david-dm.org/jhen0409/react-chrome-extension-boilerplate#info=devDependencies)
+
+> Boilerplate for Chrome Extension React.js project.
+
+## Features
+
+ - Simple [React](https://github.com/facebook/react)/[Redux](https://github.com/rackt/redux) examples of Chrome Extension Window & Popup & Inject pages
+ - Hot reloading React/Redux (Using [Webpack](https://github.com/webpack/webpack) and [React Transform](https://github.com/gaearon/react-transform))
+ - Write code with ES2015+ syntax (Using [Babel](https://github.com/babel/babel))
+ - E2E tests of Window & Popup & Inject pages (Using [Chrome Driver](https://www.npmjs.com/package/chromedriver), [Selenium Webdriver](https://www.npmjs.com/package/selenium-webdriver))
+
+## Examples
+
+The example is edited from [Redux](https://github.com/rackt/redux) TodoMVC example.
+
+#### Popup
+
+![Popup](https://cloud.githubusercontent.com/assets/3001525/14128490/dc05e9f8-f653-11e5-9de6-82d1de01844a.gif)
+
+The `todos` state will be saved to `chrome.storage.local`.
+
+#### Window
+
+![Window](https://cloud.githubusercontent.com/assets/3001525/14128489/da176b62-f653-11e5-9bff-fefc35232358.gif)
+
+The context menu is created by [chrome/extension/background/contextMenus.js](chrome/extension/background/contextMenus.js).
+
+#### Inject page
+
+The inject script is being run by [chrome/extension/background/inject.js](chrome/extension/background/inject.js). A simple example will be inject bottom of page(`https://github.com/*`) if you visit.
+
+If you are receiving the error message `Failed to load resource: net::ERR_INSECURE_RESPONSE`, you need to allow invalid certificates for resources loaded from localhost. You can do this by visiting the following URL: `chrome://flags/#allow-insecure-localhost` and enabling **Allow invalid certificates for resources loaded from localhost**.
 
 ## Installation
 
-This package is available on [npm](https://www.npmjs.com/package/react-chrome-redux):
+```bash
+# clone it
+$ git clone https://github.com/jhen0409/react-chrome-extension-boilerplate.git
 
-```
-npm install react-chrome-redux
-```
-
-## Overview
-
-`react-chrome-redux` allows you to build your Chrome extension like a Redux-powered webapp. The background page holds the Redux store, while Popovers and Content-Scripts act as UI Components, passing actions and state updates between themselves and the background store. At the end of the day, you have a single source of truth (your Redux store) that describes the entire state of your extension.
-
-All UI Components follow the same basic flow:
-
-1. UI Component dispatches action to a Proxy Store.
-2. Proxy Store passes action to background script.
-3. Redux Store on the background script updates its state and sends it back to UI Component.
-4. UI Component is updated with updated state.
-
-![Architecture](https://cloud.githubusercontent.com/assets/603426/18599404/329ca9ca-7c0d-11e6-9a02-5718a0fba8db.png)
-
-## Basic Usage ([full docs here](https://github.com/tshaddix/react-chrome-redux/wiki))
-
-As described in the [introduction](https://github.com/tshaddix/react-chrome-redux/wiki/Introduction#react-chrome-redux), there are two pieces to a basic implementation of this package.
-
-### 1. Add the *Proxy Store* to a UI Component, such as a popup
-
-```js
-// popover.js
-
-import React from 'react';
-import {render} from 'react-dom';
-import {Provider} from 'react-redux';
-import {Store} from 'react-chrome-redux';
-
-import App from './components/app/App';
-
-const store = new Store({
-  portName: 'MY_APP' // communication port name
-});
-
-// wait for the store to connect to the background page
-store.ready().then(() => {
-  // The store implements the same interface as Redux's store
-  // so you can use tools like `react-redux` no problem!
-  render(
-    <Provider store={store}>
-      <App/>
-    </Provider>
-    , document.getElementById('app'));
-});
+# Install dependencies
+$ npm install
 ```
 
-### 2. Wrap your Redux store in the background page with `wrapStore()`
+## Development
 
-```js
-// background.js
+* Run script
+```bash
+# build files to './dev'
+# start webpack development server
+$ npm run dev
+```
+* If you're developing Inject page, please allow `https://localhost:3000` connections. (Because `injectpage` injected GitHub (https) pages, so webpack server procotol must be https.)
+* [Load unpacked extensions](https://developer.chrome.com/extensions/getstarted#unpacked) with `./dev` folder.
 
-import {wrapStore} from 'react-chrome-redux';
+#### React/Redux hot reload
 
-const store; // a normal Redux store
+This boilerplate uses `Webpack` and `react-transform`, and use `Redux`. You can hot reload by editing related files of Popup & Window & Inject page.
 
-wrapStore(store, {portName: 'MY_APP'}); // make sure portName matches
+#### Using Redux DevTools Extension
+
+You can use [redux-devtools-extension](https://github.com/zalmoxisus/redux-devtools-extension) on development mode.
+
+## Build
+
+```bash
+# build files to './build'
+$ npm run build
 ```
 
-That's it! The dispatches called from UI component will find their way to the background page no problem. The new state from your background page will make sure to find its way back to the UI components.
+## Compress
 
-### 3. Optional: Implement actions whose logic only happens in the background script (we call them aliases)
-
-
-Sometimes you'll want to make sure the logic of your action creators happen in the background script. In this case, you will want to create an alias so that the alias is proxied from the UI component and the action creator logic executes in the background script.
-
-```js
-// background.js
-
-import { applyMiddleware, createStore } from 'redux';
-import { alias, wrapStore } from 'react-chrome-redux';
-
-const aliases = {
-  // this key is the name of the action to proxy, the value is the action
-  // creator that gets executed when the proxied action is received in the
-  // background
-  'user-clicked-alias': () => {
-    // this call can only be made in the background script
-    chrome.notifications.create(...);
-
-  };
-};
-
-const store = createStore(rootReducer,
-  applyMiddleware(
-    alias(aliases)
-  )
-);
+```bash
+# compress build folder to {manifest.name}.zip and crx
+$ npm run build
+$ npm run compress -- [options]
 ```
 
-```js
-// content.js
+#### Options
 
-import { Component } from 'react';
+If you want to build `crx` file (auto update), please provide options, and add `update.xml` file url in [manifest.json](https://developer.chrome.com/extensions/autoupdate#update_url manifest.json).
 
-const store = ...; // a proxy store
+* --app-id: your extension id (can be get it when you first release extension)
+* --key: your private key path (default: './key.pem')  
+  you can use `npm run compress-keygen` to generate private key `./key.pem`
+* --codebase: your `crx` file url
 
-class ContentApp extends Component {
-  render() {
-    return (
-      <input type="button" onClick={ this.dispatchClickedAlias.bind(this) } />
-    );
-  }
+See [autoupdate guide](https://developer.chrome.com/extensions/autoupdate) for more information.
 
-  dispatchClickedAlias() {
-    store.dispatch({ type: 'user-clicked-alias' });
-  }
-}
+## Test
+
+* `test/app`: React components, Redux actions & reducers tests
+* `test/e2e`: E2E tests (use [chromedriver](https://www.npmjs.com/package/chromedriver), [selenium-webdriver](https://www.npmjs.com/package/selenium-webdriver))
+
+```bash
+# lint
+$ npm run lint
+# test/app
+$ npm test
+$ npm test -- --watch  # watch files
+# test/e2e
+$ npm run build
+$ npm run test-e2e
 ```
 
-### 4. Optional: Retrieve information about the initiator of the action
+## LICENSE
 
-There are probably going to be times where you are going to want to know who sent you a message. For example, maybe you have a UI Component that lives in a tab and you want to have it send information to a store that is managed by the background script and you want your background script to know which tab sent the information to it. You can retrieve this information by using the `_sender` property of the action. Let's look at an example of what this would look like.
-
-```js
-// actions.js
-
-export const MY_ACTION = 'MY_ACTION';
-
-export function myAction(data) {
-    return {
-        type: MY_ACTION,
-        data: data,
-    };
-}
-```
-
-```js
-// reducer.js
-
-import {MY_ACTION} from 'actions.js';
-
-export function rootReducer(state = ..., action) {
-    switch (action.type) {
-    case MY_ACTION:
-        return Object.assign({}, ...state, {
-            lastTabId: action._sender.tab.id
-        });
-    default:
-        return state;
-    }
-}
-```
-
-No changes are required to your actions, react-chrome-redux automatically adds this information for you when you use a wrapped store.
-
-## Security
-
-`react-chrome-redux` supports `onMessageExternal` which is fired when a message is sent from another extension, app, or website. By default, if `externally_connectable` is not declared in your extension's manifest, all extensions or apps will be able to send messages to your extension, but no websites will be able to. You can follow [this](https://developer.chrome.com/extensions/manifest/externally_connectable) to address your needs appropriately.
-
-## Docs
-
-* [Introduction](https://github.com/tshaddix/react-chrome-redux/wiki/Introduction)
-* [Getting Started](https://github.com/tshaddix/react-chrome-redux/wiki/Getting-Started)
-* [Advanced Usage](https://github.com/tshaddix/react-chrome-redux/wiki/Advanced-Usage)
-* [API](https://github.com/tshaddix/react-chrome-redux/wiki/API)
-  * [Store](https://github.com/tshaddix/react-chrome-redux/wiki/Store)
-  * [wrapStore](https://github.com/tshaddix/react-chrome-redux/wiki/wrapStore)
-  * [alias](https://github.com/tshaddix/react-chrome-redux/wiki/alias)
-
-## Who's using this?
-
-[![Loom][loom-image]][loom-url]
-
-[![GoGuardian][goguardian-image]][goguardian-url]
-
-Using `react-chrome-redux` in your project? We'd love to hear about it! Just [open an issue](https://github.com/tshaddix/react-chrome-redux/issues) and let us know.
-
-
-[npm-image]: https://img.shields.io/npm/v/react-chrome-redux.svg
-[npm-url]: https://npmjs.org/package/react-chrome-redux
-[downloads-image]: https://img.shields.io/npm/dm/react-chrome-redux.svg
-[downloads-url]: https://npmjs.org/package/react-chrome-redux
-[loom-image]: https://cloud.githubusercontent.com/assets/603426/22037715/28c653aa-dcad-11e6-814d-d7a418d5670f.png
-[loom-url]: https://www.useloom.com
-[goguardian-image]: https://cloud.githubusercontent.com/assets/2173532/17540959/c6749bdc-5e6f-11e6-979c-c0e0da51fc63.png
-[goguardian-url]: https://goguardian.com
+[MIT](LICENSE)
