@@ -17,10 +17,12 @@ chrome.extension.onRequest.addListener(
     console.log(request.content);
   });
 
+const makeItGreen = 'document.body.style.border = "5px solid green"';
+
 chrome.tabs.getSelected(null, (tab) => {
   // Now inject a script onto the page
   chrome.tabs.executeScript(tab.id, {
-    code: "chrome.extension.sendRequest({content: document.body.innerHTML}, function(response) { console.log('success'); });"
+    code: makeItGreen
   }, () => { console.log('done'); });
 });
 
